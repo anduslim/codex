@@ -142,10 +142,7 @@ def get_readings_api(request, **kwargs):
     source = data.get('source', None)
     destination = data.get('destination', None)
 
-    if source is None and destination is None:
-        readings = Reading.objects.all()
-    else:
-        readings = Reading.objects.all()
+    readings = Reading.objects.get_readings(source, destination)
 
     import pdb; pdb.set_trace()
     response_data = {}

@@ -40,3 +40,12 @@ class ReadingsManager(models.Manager):
         else:
             return self.STATUS_CHOICES[self.ERROR]
 
+    def get_readings(self, source=None, destination=None):
+
+        if source and destination:
+            readings = self.model.objects.get()
+        else:
+            readings = self.model.objects.all()
+
+        return readings
+
