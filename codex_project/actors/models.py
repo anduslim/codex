@@ -7,7 +7,13 @@ from django.utils import timezone
 class Node(models.Model):
     ''' node information
     '''
-
+    SENSOR_NODE, GATEWAY_NODE, SNIFFER_NODE = range(3)
+    NODES_CHOICES = (
+            (SENSOR_NODE, u'Sensor'),
+            (GATEWAY_NODE, u'Gateway'),
+            (SNIFFER_NODE, u'Sniffer')
+        )
+    
     node_id = models.PositiveIntegerField(blank=False)
 
     node_type = models.PositiveSmallIntegerField(
