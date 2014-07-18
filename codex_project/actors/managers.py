@@ -1,5 +1,9 @@
 from django.db import models
 from datetime import datetime
+from actors.haversine import haversine
+from django.core.serializers.json import DjangoJSONEncoder
+import json
+from django.utils import timezone
 
 class NodesManager(models.Manager):
 
@@ -40,12 +44,31 @@ class ReadingsManager(models.Manager):
         else:
             return self.STATUS_CHOICES[self.ERROR]
 
+    def parse_readings(self, readings):
+        processed_readings = []
+        prev_reading = None
+
+        for reading in readings:
+            if prev_reading is None:
+                prev_reading = reading
+            current_tz = timezone.get_current_timezone()
+            local = current_tz.normalize(reading.timestamp)
+
+            temp_reading = {'timestamp' : local,
+                            'seqno': reading.seq_no,
+                            'sensor_modality': reading.sensor.modality,
+                            'sensor_format': reading.sensor.data_format,
+                            'value' : reading.value
+            }
+            processed_readings.append(temp_reading)
+        return json.dumps(processed_readings, cls=DjangoJSONEncoder)
+
     def get_readings(self, source=None, destination=None):
 
         if source and destination:
-            readings = self.model.objects.get()
+            readings = self.parse_readings(self.model.objects.get())
         else:
-            readings = self.model.objects.all()
+            readings = self.parse_readings(self.model.objects.all())
 
         return readings
 

@@ -9,6 +9,7 @@ from django.conf import settings
 from actors.models import Node, SensorMap, Reading, Sensor
 from actors.managers import ReadingsManager
 import datetime
+from django.core.serializers.json import DjangoJSONEncoder
 
 #-------------------------------------------------------------------------------
 @csrf_exempt
@@ -148,7 +149,6 @@ def get_readings_api(request, **kwargs):
     response_data = {}
     response_data['status'] = {'code': 200,
                                 'timestamp': datetime.datetime.now(),
-                                'message': reading[1]
                             }
 
 
@@ -156,4 +156,4 @@ def get_readings_api(request, **kwargs):
                                 'value': readings
                                 }
 
-    return HttpResponse(json.dumps(response_data), status=200, content_type="application/json")
+    return HttpResponse(json.dumps(response_data, cls=DjangoJSONEncoder), status=200, content_type="application/json")
