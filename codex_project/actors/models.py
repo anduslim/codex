@@ -13,7 +13,7 @@ class Node(models.Model):
             (GATEWAY_NODE, u'Gateway'),
             (SNIFFER_NODE, u'Sniffer')
         )
-    
+
     node_id = models.PositiveIntegerField(blank=False)
 
     node_type = models.PositiveSmallIntegerField(
@@ -52,8 +52,8 @@ class SensorMap(models.Model):
                         related_name='sensor_map')
 
     def __str__(self):
-        return ', '.join([str(self.id), 'config_id-' + 
-            str(self.app_config_id), 'bit-' + 
+        return ', '.join([str(self.id), 'config_id-' +
+            str(self.app_config_id), 'bit-' +
             str(self.modality_bit), self.sensor.modality])
 
 
@@ -85,6 +85,6 @@ class Reading(models.Model):
     value = models.CharField(max_length=50)
 
     def __str__(self):
-        return ', '.join([str(self.id), str(self.timestamp), self.node.node_id, 
+        return ', '.join([str(self.id), str(self.timestamp), self.node.node_id,
             self.value])
 
