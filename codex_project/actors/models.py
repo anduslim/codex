@@ -82,7 +82,9 @@ class Reading(models.Model):
     sensor = models.ForeignKey('Sensor', blank=False, null=False,
                         related_name='sensor_reading')
 
-    value = models.CharField(max_length=50)
+    value = models.CharField(max_length=100)
+
+    objects = managers.ReadingsManager()
 
     def __str__(self):
         return ', '.join([str(self.id), str(self.timestamp), self.node.node_id,
