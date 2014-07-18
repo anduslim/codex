@@ -18,52 +18,7 @@ def new_node_api(request):
     '''
 
     data = request.POST
-    # deployment_name = str(data.get('deployment', None))
-    # try:
-    #     deployment = Deployment.objects.get(name=deployment_name)
-    # except Deployment.DoesNotExist:
-    #     print("Deployment does not exist")
-    #     return HttpResponse("Deployment does not exist", status=404)
 
-    # try:
-    #     node_id = int(data.get('node_id', None))
-    #     if node_id is None:
-    #         print("Node ID is not passed in")
-    #         return HttpResponse("Node ID is invalid.", status=404)
-    # except TypeError as e:
-    #     return HttpResponse("Please key in an integer for node ID.", status=404)
-
-    # try:
-    #     node_type = int(data.get('node_type', None))
-    #     if node_type not in dict(Node.NODES_CHOICES):
-    #         print("Node Type does not exist")
-    #         return HttpResponse("Node type does not exist!", status=404)
-    # except TypeError as e:
-    #     return HttpResponse("Please key in an integer for node type.", status=404)
-
-    # parse_keys, raw_keys = KeyGenerator.generate_keys(deployment.id, node_id)
-    # result, node = KeyGenerator.update_backend_keys(deployment, node_id, node_type, parse_keys)
-
-    # print("Result" + str(result) + "\nReceived: " + str(data) +"\n");
-
-
-    # if result is True:
-    #     response_data = {}
-    #     response_data['status'] = '201 CREATED'
-    #     response_data['node'] = { 'gid': node.id,
-    #                         'deployment_name': node.deployment.name,
-    #                         'node_id': node.node_id,
-    #                         'node_type': node.get_node_type_display(),
-    #                         'key_version': node.key_version,
-    #                         'authentication_key': node.authentication_key.key_value,
-    #                         'encryption_key': node.encryption_key.key_value,
-    #                         'group_key': node.group_key.key_value,
-    #                         'ota_key': node.ota_key.key_value,
-    #                         'raw_keys': raw_keys
-    #                 }
-
-    #     return HttpResponse(json.dumps(response_data), status=201, content_type="application/json")
-    # else:
     return HttpResponse("Error creating new node.", status=404)
 
 
@@ -75,18 +30,6 @@ class HomeView(TemplateView):
 
 
     template_name = 'base/home.html'
-
-    def keys_C_format(self, key):
-        result = ""
-        tempBuf = ""
-        for index, shex in enumerate(key):
-            tempBuf += shex
-            if index%2 == 1:
-                result += '0x' + tempBuf
-                if index != (len(key)-1):
-                    result += ', '
-                tempBuf = ""
-        return result
 
 
     def get_context_data(self, **kwargs):
