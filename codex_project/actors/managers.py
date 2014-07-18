@@ -34,7 +34,7 @@ class ReadingsManager(models.Manager):
                 status = self.STATUS_CHOICES[self.EXISTS]
             except self.model.DoesNotExist:
                 try:
-                  valid_datetime = datetime.strptime(timestamp, '%Y-%m-%d %H:%M')
+                  valid_datetime = datetime.strptime(timestamp, '%Y-%m-%d %H:%M:%S')
                 except ValueError:
                     return self.STATUS_CHOICES[self.ERROR]
                 self.create(seq_no=seq_no, timestamp=valid_datetime, node=node_id,
@@ -46,12 +46,14 @@ class ReadingsManager(models.Manager):
 
     def parse_readings(self, readings):
         processed_readings = []
-        prev_reading = None
+        prev_gps_reading = None
+        prev_acc_reading = None
+        current_tz = timezone.get_current_timezone()
 
         for reading in readings:
             if prev_reading is None:
                 prev_reading = reading
-            current_tz = timezone.get_current_timezone()
+
             local = current_tz.normalize(reading.timestamp)
 
             temp_reading = {'timestamp' : local,
