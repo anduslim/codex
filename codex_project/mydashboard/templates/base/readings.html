@@ -1,0 +1,141 @@
+{% extends "_layouts/base.html" %}
+
+{% block css %}
+{{block.super}}
+<style>
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+.highlight {
+  padding: 9px 14px;
+  margin-bottom: 14px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 4px;
+  word-wrap: break-word;
+}
+.nav_highlight {
+  border: 1px solid #f1f1f8;
+  background-color: #efefe3;
+  border-radius: 3px;
+
+}
+
+.text-glow:hover,
+.text-glow:focus
+.text-glow:active{
+    -webkit-stroke-width: 5.3px;
+    -webkit-stroke-color: #FFFFFF;
+    -webkit-fill-color: #FFFFFF;
+    text-shadow: 1px 0px 20px yellow;
+    -webkit-transition: width 0.5s; /*Safari & Chrome*/
+    transition: width 0.3s;
+    -moz-transition: width 0.5s; /* Firefox 4 */
+    -o-transition: width 0.5s; /* Opera */
+     
+}
+ 
+.text-glow{
+     
+    -webkit-transition: all 0.3s ease-in; /*Safari & Chrome*/  
+    transition: all 0.3s ease-in;
+    -moz-transition: all 0.3s ease-in; /* Firefox 4 */
+    -o-transition: all 0.3s ease-in; /* Opera */
+     
+    text-decoration:none;
+    color:white;
+}
+</style>
+<script src="http://10.217.138.166:4000/socket.io/socket.io.js"></script>
+
+{% endblock css %}
+
+{% block page_title %}Sensor Readings{% endblock %}
+{% block page_class %}home-page{% endblock %}
+
+{% block readings_active %}active{% endblock %}
+
+{% block container %}
+
+      <div class="page-header">
+        <h1>Node Readings</h1>
+      </div>
+
+      <div class="row">
+      {% for node in nodes.active_node %}
+        <div class="col-md-4">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Node {{ node.node_id }}</h3>
+            </div>
+            <div class="panel-body">
+              <div class="well">
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>Node Type</label>
+                  </div>
+                  <div class="col-md-6">
+                    <span id="node_type" style="width:100%; word-wrap: break-word;">{{ node.get_node_type_display }}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>Deployment</label>
+                  </div>
+                  <div class="col-md-6">
+                    <span id="node_type" style="width:100%; word-wrap: break-word;">{{ node.deployment.name }}</span>
+                  </div>
+                </div>
+                <div class="row">
+                  <div class="col-md-6">
+                    <label>Last Active Reading at Gateway:</label>
+                  </div>
+                  <div class="col-md-6">
+                    <span id="node_active_{{ node.node_id }}" style="width:100%; word-wrap: break-word;"></span>
+                  </div>
+                </div>
+              </div> <!-- end of well -->
+
+              <div class="row">
+                <div class="col-md-12">
+                  <label>Node Readings</label>
+
+                  <!-- Table -->
+                  <table class="table" id="table_{{ node.node_id }}">
+                    <thead>
+                      <tr>
+                        <th>Modality</th>
+                        <th>Readings</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      {% for modality in modalities %}
+                        {% if node.app_config.config_id == modality.app_config.config_id %}
+                        <tr id="row_{{ node.node_id }}_{{ modality.sensor.modality }}">
+                          <td>{{ modality.sensor.modality }}</td>
+                          <td></td>
+                        </tr>
+                        {% endif %}
+                      {% endfor %}
+                    </tbody>
+                  </table>
+                </div>
+              </div>
+
+
+            </div>
+          </div>
+        </div>
+        {% if forloop.counter|divisibleby:"3" %}
+        </div><div class="row">
+        {% endif %}
+      {% endfor %}
+      </div>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/readings.js"></script>
+{% endblock %}

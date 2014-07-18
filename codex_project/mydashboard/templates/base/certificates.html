@@ -1,0 +1,101 @@
+{% extends "_layouts/base.html" %}
+
+{% block css %}
+{{block.super}}
+<style>
+/* Move down content because we have a fixed navbar that is 50px tall */
+body {
+  padding-top: 50px;
+  padding-bottom: 20px;
+}
+.highlight {
+  padding: 9px 14px;
+  margin-bottom: 14px;
+  background-color: #f7f7f9;
+  border: 1px solid #e1e1e8;
+  border-radius: 4px;
+  word-wrap: break-word;
+}
+.nav_highlight {
+  border: 1px solid #f1f1f8;
+  background-color: #efefe3;
+  border-radius: 3px;
+
+}
+
+.text-glow:hover,
+.text-glow:focus
+.text-glow:active{
+    -webkit-stroke-width: 5.3px;
+    -webkit-stroke-color: #FFFFFF;
+    -webkit-fill-color: #FFFFFF;
+    text-shadow: 1px 0px 20px yellow;
+    -webkit-transition: width 0.5s; /*Safari & Chrome*/
+    transition: width 0.3s;
+    -moz-transition: width 0.5s; /* Firefox 4 */
+    -o-transition: width 0.5s; /* Opera */
+     
+}
+ 
+.text-glow{
+     
+    -webkit-transition: all 0.3s ease-in; /*Safari & Chrome*/  
+    transition: all 0.3s ease-in;
+    -moz-transition: all 0.3s ease-in; /* Firefox 4 */
+    -o-transition: all 0.3s ease-in; /* Opera */
+     
+    text-decoration:none;
+    color:white;
+}
+</style>
+{% endblock css %}
+
+{% block page_title %}Sensor Readings{% endblock %}
+{% block page_class %}home-page{% endblock %}
+
+{% block certificate_active %}active{% endblock %}
+
+{% block container %}
+
+      <div class="page-header">
+        <h1>Certificate Generation</h1>
+      </div>
+
+      <div class="row">
+
+        <div class="col-md-4 col-md-offset-4">
+          <div class="panel panel-default">
+            <div class="panel-heading">
+              <h3 class="panel-title">Create a new client certifcate</h3>
+            </div>
+            <div class="panel-body">
+              <div class="well">
+                <form id="certificate-form" method="post" action="{% url "mydashboard:certificates" %}"> {% csrf_token %}
+
+                  <div style="padding-left:20px; padding-bottom:20px;">
+                    <label>Certificate Name:</label>
+                    <br/>
+                    <input id="cert_name" name='cert_name' type="text"></input>
+                  </div>
+                  <div style="padding-left:20px; padding-bottom:20px;">
+                    <label>Common Name (FQDN):</label>
+                    <br/>
+                    <input id="common_name" name='common_name' type="text"></input>
+                  </div>
+                  <div style="text-align: center;">
+                    <button type="submit" class="btn btn-success">Create</button>
+                  </div>
+                </form>
+
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+{% endblock %}
+
+{% block js %}
+    <script type="text/javascript" src="{{ STATIC_URL }}js/readings.js"></script>
+{% endblock %}
