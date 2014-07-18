@@ -7,6 +7,8 @@ from django.views.generic import View
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from actors.models import Node, SensorMap, Reading, Sensor
+from actors.managers import ReadingsManager
+import datetime
 
 #-------------------------------------------------------------------------------
 @csrf_exempt
@@ -103,17 +105,58 @@ def post_readings_api(request, **kwargs):
         return HttpResponse(status=404)
 
     try:
-        sensor = SensorMap.objects.get(modality_bit=sensor_id, app_config=node.app_config)
+        sensorMap = SensorMap.objects.get(modality_bit=sensor_id, app_config=node.app_config)
     except SensorMap.DoesNotExist:
         return HttpResponse(status=404)
 
-    reading = Reading.objects.add_reading(timestamp, seqno, node, sensor, readings)
+    reading = Reading.objects.add_reading(timestamp, seqno, node, sensorMap.sensor,
+                readings)
+
+    response_data = {}
+    response_data['status'] = {'code': 200,
+                                'timestamp': timestamp,
+                                'message': reading[1]
+                            }
+
+    response_data['node'] = { 'id': node.node_id,
+                            'type': node.get_node_type_display(),
+                            'app_config': node.app_config.config_id
+                }
+
+    response_data['sensor'] = { 'modality': sensorMap.sensor.modality,
+                                'data_format': sensorMap.sensor.data_format,
+                                'value': readings
+                                }
+
+    return HttpResponse(json.dumps(response_data), status=200, content_type="application/json")
+
+#-------------------------------------------------------------------------------
+@csrf_exempt
+def get_readings_api(request, **kwargs):
+    '''
+    API HTTP POST call to send node readings
+    HTTP parameters: seqno, timestamp, node_id, sensor_id, readings
+    '''
+
+    data = request.GET
+    source = data.get('source', None)
+    destination = data.get('destination', None)
+
+    if source is None and destination is None:
+        readings = Reading.objects.all()
+    else:
+        readings = Reading.objects.all()
 
     import pdb; pdb.set_trace()
     response_data = {}
-    response_data['status'] = '200 UPDATED'
-    response_data['node'] = { 'id': node.id,
-                        'node_type': node.get_node_type_display(),
-                }
+    response_data['status'] = {'code': 200,
+                                'timestamp': datetime.datetime.now(),
+                                'message': reading[1]
+                            }
+
+
+    response_data['readings'] = {
+                                'value': readings
+                                }
 
     return HttpResponse(json.dumps(response_data), status=200, content_type="application/json")

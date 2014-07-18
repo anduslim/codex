@@ -87,6 +87,6 @@ class Reading(models.Model):
     objects = managers.ReadingsManager()
 
     def __str__(self):
-        return ', '.join([str(self.id), str(self.timestamp), self.node.node_id,
+        return ', '.join([str(self.id), str(self.timestamp), str(self.node.node_id),
             self.value])
 

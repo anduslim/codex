@@ -1,8 +1,9 @@
 from django.db import models
+from datetime import datetime
 
 class NodesManager(models.Manager):
 
-	def create_node(self, _deployment, _node_id, _node_type, _key_version, _AK, _EK, _GK, _OTAK, _app_config):
+	def create_node(self, _node_id= None, _node_type=None,  _app_config=None):
 
 		try:
 			node = self.model.objects.get()
@@ -14,12 +15,28 @@ class NodesManager(models.Manager):
 
 class ReadingsManager(models.Manager):
 
-    def add_reading(self, timestamp, seq_no, node_id, sensor_id, readings):
+    ERROR, CREATED, EXISTS = range(3)
+    STATUS_CHOICES = (
+        (ERROR, u'Error! Reading not recorded!'),
+        (CREATED, u'Success! Reading accepted!'),
+        (EXISTS, u'WARNING! Reading exists!')
+    )
 
-        try:
-            reading = self.model.objects.get(seq_no=seq_no)
-        except self.model.DoesNotExist:
-            reading = self.create(seq_no=seq_no, timestamp=timestamp, node=node_id,
-                        sensor=sensor_id, value=readings)
-        return reading
+    def add_reading(self, timestamp=None, seq_no=None, node_id=None, sensor_id=None,
+                     readings=None):
+        if seq_no != None or node_id != None:
+            try:
+                self.model.objects.get(seq_no=seq_no, node=node_id)
+                status = self.STATUS_CHOICES[self.EXISTS]
+            except self.model.DoesNotExist:
+                try:
+                  valid_datetime = datetime.strptime(timestamp, '%Y-%m-%d %H:%M')
+                except ValueError:
+                    return self.STATUS_CHOICES[self.ERROR]
+                self.create(seq_no=seq_no, timestamp=valid_datetime, node=node_id,
+                            sensor=sensor_id, value=readings)
+                status = self.STATUS_CHOICES[self.CREATED]
+            return status
+        else:
+            return self.STATUS_CHOICES[self.ERROR]
 
