@@ -96,9 +96,8 @@ function plotRoute() {
     directionsDisplay = new google.maps.DirectionsRenderer(rendererOptions);
     directionsDisplay.setPanel(document.getElementById('controls'));
 
-    var point1 = new google.maps.LatLng(1.2932808787143,103.843016698);
-    var point2 = new google.maps.LatLng(1.2950608152056,103.8415261232);
-    var point3 = new google.maps.LatLng(1.294709709207,103.841169);
+    var point1 = new google.maps.LatLng(1.2948948, 103.8510814);
+    var point2 = new google.maps.LatLng(1.298593, 103.845909);
 
     var wps = [{ location: point1 }, { location: point2 }, {location: point3}];
 
@@ -163,6 +162,7 @@ function getReadings(){
 function clearReadings(){
 
     $('#error_msg').text("");
+    map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
 }
 
 
