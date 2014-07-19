@@ -99,7 +99,7 @@ function plotRoute() {
     var point1 = new google.maps.LatLng(1.2948948, 103.8510814);
     var point2 = new google.maps.LatLng(1.298593, 103.845909);
 
-    var wps = [{ location: point1 }, { location: point2 }, {location: point3}];
+    var wps = [{ location: point1 }, { location: point2 }];
 
     org = new google.maps.LatLng ( 1.2968599, 103.852202);
     dest = new google.maps.LatLng ( 1.2974042, 103.8542797);
