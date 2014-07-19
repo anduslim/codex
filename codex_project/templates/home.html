@@ -1,7 +1,6 @@
 {% extends "base.html" %}
 
-{% block css %}
-{{block.super}}
+{% block extra_css %}
 <style>
 </style>
 <script type="text/javascript"
@@ -51,187 +50,50 @@
             <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
         <![endif]-->
 
-{% block page_title %}Key Management Dashboard{% endblock %}
-{% block page_class %}home-page{% endblock %}
+    <!-- Section #1 -->
+    <section id="intro" data-speed="6" data-type="background">
 
-{% block control_active %}active{% endblock %}
+        <div class="container">
 
-{% block container %}
 
-      <div class="page-header">
-        <h1>Node Information</h1>
-      </div>
+            <header id="masthead" class="wrapper">
 
-      <h2><span class="label label-success">Live Nodes</span></h2>
-      <div class="row">
-      {% for node in nodes.active_node %}
-        <div class="col-md-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">Node {{ node.node_id }}</h3>
-            </div>
-            <div class="panel-body">
-              <div class="well">
-                <div class="row">
-                  <div class="col-md-5">
-                    <label>Node Type</label>
-                  </div>
-                  <div class="col-md-7">
-                    <span id="node_type" style="width:100%; word-wrap: break-word;">{{ node.get_node_type_display }}</span>
-                  </div>
-                </div>
-                <div class="row">
-                  <div class="col-md-5">
-                    <label>Deployment</label>
-                  </div>
-                  <div class="col-md-7">
-                    <span id="node_type" style="width:100%; word-wrap: break-word;">{{ node.deployment.name }}</span>
-                  </div>
-                </div>
-                <div class="row" style="padding-bottom:15px;">
-                  <div class="col-md-5">
-                    <label>Status</label>
-                  </div>
-                  <div class="col-md-7">
-                    <span id="node_status" style="width:100%; word-wrap: break-word;">Registered: {{ node.registration_status }}</span>
-                  </div>
-                </div>
 
-                <div class="row">
-                  <div class="col-md-12">
-                    <label>Node Keys</label>
-                  </div>
-                </div>
-                <!-- Nav tabs -->
-                <ul class="nav nav-pills nav_highlight" id="myTab">
-                  <li class="active"><a href="#Authentication-{{node.node_id}}" data-toggle="tab" data-toggle="tooltip" data-placement="top" title="Authentication Key">Authentication</a></li>
-                  <li><a href="#Encryption-{{node.node_id}}" data-toggle="tab" data-toggle="tooltip" data-placement="top" title="Encryption Key">Encryption</a></li>
-                  <li><a href="#Group-{{node.node_id}}" data-toggle="tab" data-toggle="tooltip" data-placement="top" title="Group Key">Group</a></li>
-                  <li><a href="#OTA-{{node.node_id}}" data-toggle="tab" data-toggle="tooltip" data-placement="top" title="OTA Key">OTA</a></li>
-                </ul>
+                <div class="container" id="center_top">
 
-                <!-- Tab panes -->
-                <div class="tab-content">
-                  <div class="tab-pane highlight fade active in" id="Authentication-{{node.node_id}}">{{ node.authentication_key.key_value }}</div>
-                  <div class="tab-pane highlight fade" id="Encryption-{{node.node_id}}">{{ node.encryption_key.key_value }}</div>
-                  <div class="tab-pane highlight fade" id="Group-{{node.node_id}}">{{ node.group_key.key_value }}</div>
-                  <div class="tab-pane highlight fade" id="OTA-{{node.node_id}}">{{ node.ota_key.key_value }}</div>
-                </div>
 
-              </div> <!-- end of well -->
+                    <h1 class="text-center" id="chunk">WheelAccess</h1>
+                    <p class="text-center">WheelAccess is an intelligent crowd-sourcing platform which uses sensors to automatically record your wheelchair trips and allows anyone to discover wheelchair accessible routes in Singapore.
+                    </p>
+                    <p class="text-center">
+                    Through this platform, we hope to make Singapore a more inclusive place for wheelchair users, improving their mobility.</p>
 
-              <!-- Start of node management -->
-              <div class="row">
-                <div class="col-md-12">
-                  <label>Node Management</label>
-                </div>
-              </div>
-              <form  action"{% url "mydashboard:dashboard" %}" method="POST" id="command-form"> {% csrf_token %}
-                <!-- start of command type selection -->
-                <div class="form-group">
-                  <label for="commandType">Command :</label>
-                  <select onChange="myCommand(this.id)" name="node_command-{{node.node_id}}" id="command-{{node.node_id}}">
-                    <option value="" disabled selected style="display:none;">Select</option>
-                    <option value="1">Key Update</option>
-                    <option value="2">Node Update</option>
-                  </select>
-                  <input type="hidden" name="node_ID" id="node_ID" value="{{node.node_id}}">
-                  <input type="hidden" name="node_deployment" id="node_deployment" value="{{node.deployment.name}}">
-                </div>
-                <!-- start of security keys command -->
-                <div id="Key_Command"style="display:none;">
-                  <div class="form-group">
-                    <label for="authentication_key-{{node.node_id}}">AK:</label>
-                    <input type="text" class="form-control" name="authentication_key-{{node.node_id}}" id="authentication_key-{{node.node_id}}" placeholder="Authentication Key">
-                  </div>
-                  <div class="form-group">
-                    <label for="encryption_key-{{node.node_id}}">EK:</label>
-                    <input type="text" class="form-control" name="encryption_key-{{node.node_id}}" id="encryption_key-{{node.node_id}}" placeholder="Encryption Key">
-                  </div>
-                  <div class="form-group">
-                    <label for="group_key-{{node.node_id}}">GK:</label>
-                    <input type="text" class="form-control" name="group_key-{{node.node_id}}" id="group_key-{{node.node_id}}" placeholder="Group Key">
-                  </div>
-                  <div class="form-group">
-                    <label for="ota_key-{{node.node_id}}">OTAK:</label>
-                    <input type="text" class="form-control" name="ota_key-{{node.node_id}}" id="ota_key-{{node.node_id}}" placeholder="OTA Key">
-                  </div>
-                </div>
-
-                <!-- start of node management command -->
-                <div id="Node_Command" style="display:none;">
-                  <div class="form-group">
-                    <label class="radiobox-inline">
-                      <input type="radio" name="interval_type" id="radio_sending" value="send"> Sending
-                    </label>
-                    <label class="radiobox-inline">
-                      <input type="radio" name="interval_type" id="radio_sensing" value="sense"> Sensing
-                    </label>
-                  </div>
-                  <div id="Send_Command" style="display:none;">
-                    <div class="form-group">
-                      <div class="form-group">
-                        <label for="commandType">Device :</label>
-                        <select name="device-{{node.node_id}}" id="device-{{node.node_id}}">
-                          <option value="" disabled selected style="display:none;">Select</option>
-                          <option value="0">Due 1</option>
-                          <option value="1">Due 2</option>
-                          <option value="2">Waspmote</option>
-                        </select>
-                      </div>
-
-                      <label for="sending-{{node.node_id}}">Sending Interval</label>
-                      <input type="text" class="form-control" name="send_int-{{node.node_id}}" id="send_int-{{node.node_id}}" placeholder="Sending interval in ms">
+                    <div class="video-container">
+                        <iframe src="http://player.vimeo.com/video/101109231?title=0&byline=0&portrait=0" width="800" height="450" frameborder="0"></iframe>
                     </div>
-                  </div>
-                  <div id="Sense_Command" style="display:none;">
-                    <div class="form-group">
-                      <label for="sensorType">Sensor:</label>
-                      <select name="sensor-{{node.node_id}}" id="sensor_type-{{node.node_id}}">
 
-                        {% for modality in modalities %}
-                          {% if node.app_config.config_id == modality.app_config.config_id %}
-                          <option value="{{ modality.modality_bit }}">{{ modality.sensor.modality }}</option>
-                          {% endif %}
-                        {% endfor %}
-                      </select>
-                    </div>
-                    <div class="form-group">
-                      <label for="sensing-{{node.node_id}}">Sensing Interval</label>
-                      <input type="text" class="form-control" name="sense_int-{{node.node_id}}" id="sense_int-{{node.node_id}}" placeholder="Sensing interval in ms">
-                    </div>
-                  </div>
-                </div>
-                <input type="button" id='genkeyBtn' onclick="generateKeys()" style="display:none;" class="btn btn-default" value="Generate Keys">
+               </div>
 
-                <button id='submitBtn' type="submit" class="btn btn-primary disabled" style="">Submit</button>
-              </form>
-            </div>
-          </div>
+
+            </header>
         </div>
-        {% if forloop.counter|divisibleby:"3" %}
-        </div><div class="row">
-        {% endif %}
-      {% endfor %}
-      </div>
+    </section>
 
-      <h2><span class="label label-warning">Inactive Nodes</span></h2>
-      <div class="row">
-      {% for node in nodes.inactive_node %}
-        <div class="col-md-4">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h3 class="panel-title">Node {{ node.node_id }}</h3>
+    <!-- Section #3 -->
+    <section class="pad-10" id="about" data-speed="4" data-type="background">
+        <div class="container">
+            <div class="page-header">
+                <h1>About</h1>
             </div>
-            <div class="panel-body">
-              <div class="well">
+            <div class="row-fluid">
+                <div class="span4">
+                    <p>WheelAccess was developed by <a href="http://www.codeforphilly.org/projects/Bike_Route_Tracker">Code for Philly</a>, an open group of citizens working to harness the power of technology to modernize citizenship in Philadelphia.</p>
+
+                    <p>WheelAccess users are helping planners in the City of Philadelphia and Delaware Valley build better bike routes.</p>
+
+                </div>
                 <div class="row">
-                  <div class="col-md-5">
-                    <label>Node Type</label>
-                  </div>
-                  <div class="col-md-7">
-                    <span id="node_type" style="width:100%; word-wrap: break-word;">{{ node.get_node_type_display }}</span>
-                  </div>
+
                 </div>
                 <!-- /.span4 -->
             </div>
@@ -330,35 +192,57 @@
 <!-- End terms and contact -->
                     </div><!-- /.span4 -->
                 </div>
-
-                <!-- Nav tabs -->
-                <ul class="nav nav-pills nav_highlight">
-                  <li class="active"><a href="#Authentication-{{node.node_id}}" data-toggle="tab" data-toggle="tooltip" data-placement="top" title="Authentication Key">Authentication</a></li>
-                  <li><a href="#Encryption-{{node.node_id}}" data-toggle="tab" data-toggle="tooltip" data-placement="top" title="Encryption Key">Encryption</a></li>
-                  <li><a href="#Group-{{node.node_id}}" data-toggle="tab" data-toggle="tooltip" data-placement="top" title="Group Key">Group</a></li>
-                  <li><a href="#OTA-{{node.node_id}}" data-toggle="tab" data-toggle="tooltip" data-placement="top" title="OTA Key">OTA</a></li>
-                </ul>
-
-                <!-- Tab panes -->
-                <div class="tab-content">
-                  <div class="tab-pane highlight fade active in" id="Authentication-{{node.node_id}}">{{ node.authentication_key.key_value }}</div>
-                  <div class="tab-pane highlight fade" id="Encryption-{{node.node_id}}">{{ node.encryption_key.key_value }}</div>
-                  <div class="tab-pane highlight fade" id="Group-{{node.node_id}}">{{ node.group_key.key_value }}</div>
-                  <div class="tab-pane highlight fade" id="OTA-{{node.node_id}}">{{ node.ota_key.key_value }}</div>
-                </div>
-
-              </div>
-            </div>
-          </div>
         </div>
-        {% if forloop.counter|divisibleby:"3" %}
-        </div><div class="row">
-        {% endif %}
-      {% endfor %}
-      </div>
+  </section>
 
+
+
+
+
+<!-- end copying to live site -->
+<div class="hidden" id="counter">
+    TRIPS:
+    <span id="tickerToday">28</span> today |
+    <span id="tickerTotal">7,309</span> total
+    <a id="statsBtn" href="/#stats"><span style="float:right">View All Stats</span></a>
+</div>
+ <div class="lightbox-dark" id="stats">
+    <div class="">
+        <h2>WheelAccess Stats</h2>
+        <p>Hover on a date below to view stats</p>
+        <div class="row">
+            <div class="col-xs-12 col-sm-6 col-md-9">
+                <div id="calendar_basic" style="width: 750px; height: 150px;">
+                    <img src="{{STATIC_URL}}img/loader.gif">
+                </div>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-9">
+                <div id="calendar_details">
+                    <p>Details</p>
+                    <hr>
+                    <p>Total Travelers: <span id="totalRiders">175</span></p>
+                    <p>Total Travelers today: <span id="totalRidersToday"></span></p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+</div>
 {% endblock %}
 
-{% block js %}
-    <script type="text/javascript" src="{{ STATIC_URL }}js/home.js"></script>
+{% block extra_js %}
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+    <script src="{{STATIC_URL}}js/jquery.leddisplay.js"></script>
+    <script src="{{STATIC_URL}}js/bootstrap.min.js"></script>
+    <script src="{{STATIC_URL}}js/countUp.min.js"></script>
+
+
+    <script src="{{STATIC_URL}}js/main.js"></script><script src="https://www.google.com/uds/?file=visualization&amp;v=1.1&amp;packages=calendar" type="text/javascript"></script><link href="https://www.google.com/uds/api/visualization/1.1/179b5a1c97ada6cec37a6144fa6ee127/ui+en.css" type="text/css" rel="stylesheet"><script src="https://www.google.com/uds/api/visualization/1.1/179b5a1c97ada6cec37a6144fa6ee127/format+en,default+en,ui+en,calendar+en.I.js" type="text/javascript"></script>
+    <script src="{{STATIC_URL}}js/underscore.js"></script>
+
+
+
+
 {% endblock %}

@@ -788,19 +788,31 @@ margin-left: 20%;
 
 
 .google-maps {
-position: relative;
-padding-bottom: 75%; // This is the aspect ratio
-height: 0;
-overflow: hidden;
+    position: relative;
+    padding-bottom: 75%; // This is the aspect ratio
+    height: 0;
+    overflow: hidden;
 }
 .google-maps-iframe {
-position: absolute;
-top: 0;
-left: 0;
-width: 100% !important;
-height: 100% !important;
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 50%;
+    height: 54%;
+    float: left;
 }
 
+.adp-warnbox {
+    display:none;
+}
 
+.adp-legal {
+    display:none;
+}
 
-
+.mcontrols {
+    width: 50%;
+    float: right;
+    direction: ltr;
+    background-color: snow;
+}
