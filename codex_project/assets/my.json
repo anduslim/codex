@@ -1,0 +1,49 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": {
+        "letter": "l",
+        "color": "blue",
+        "rank": "7",
+        "ascii": "71"
+      },
+      "geometry": {
+        "type": "LineString",
+        "coordinates": [ [1.36374595,104.924], [1.37374595,105.024] ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "letter": "G",
+        "color": "blue",
+        "rank": "7",
+        "ascii": "71"
+      },
+      "geometry": {
+        "type": "MultiPoint",
+        "coordinates": [ [1.35374595,103.924], [1.36374595,104.024] ]
+      }
+    },
+    {
+      "type": "Feature",
+      "properties": {
+        "letter": "x",
+        "color": "blue",
+        "rank": "9",
+        "ascii": "71"
+      },
+      "geometry": {
+        "type": "Polygon",
+        "coordinates": [ 
+          [
+            [1.3123,103.9123], [1.2123,103.9123], [1.2123,102.9123], 
+            [1.3123,102.9123], [1.3123,103.9123]
+          ]
+        ]
+      }
+    }
+  ]
+}

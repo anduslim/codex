@@ -37,8 +37,9 @@ $(document).ready(function(){
       $('#weatherDescription').html(snapshot.val());
   });
   weatherRef.child('temperature').on('value', function(snapshot) {
-      console.log('Temperature is currently ' + snapshot.val());
-      $('#currentTemp').html(snapshot.val());
+      var tempCelsius = (snapshot.val()-29)*5/8;
+      console.log('Temperature is currently ' + tempCelsius);
+      $('#currentTemp').html(tempCelsius.toFixed(2));
   });
   weatherRef.child('icon').on('value', function(snapshot) {
       // Parse icon
@@ -128,7 +129,7 @@ google.setOnLoadCallback(function (){
         setTimeout(function(){
           var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
         var options = {
-          title: "2014 CyclePhilly Trips",
+          title: "2014 WheelAccess Trips",
           height: 150,
           calendar: { cellSize: 13 },
           noDataPattern: {
@@ -144,7 +145,7 @@ google.setOnLoadCallback(function (){
 
       var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
       var options = {
-        title: "2014 CyclePhilly Trips",
+        title: "2014 WheelAccess Trips",
         height: 150,
         calendar: { cellSize: 13 },
         noDataPattern: {
