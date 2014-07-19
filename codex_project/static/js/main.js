@@ -37,7 +37,7 @@ $(document).ready(function(){
       $('#weatherDescription').html(snapshot.val());
   });
   weatherRef.child('temperature').on('value', function(snapshot) {
-      var tempCelsius = (snapshot.val()-32)*5/7;
+      var tempCelsius = (snapshot.val()-30)*5/6;
       console.log('Temperature is currently ' + tempCelsius);
       $('#currentTemp').html(tempCelsius.toFixed(2));
   });
