@@ -245,37 +245,3 @@ function collapseBar(){
   }
 }
 
-var eventHandler = function(data) {
-
-    console.log("success: readings:" + data.readings);
-    var readings = data.readings;
-};
-
-var errorHandler = function(xhr) {
-    console.log("xhr.status:" + xhr.status);
-    switch (xhr.status) {
-      case 404:
-      console.log("API error: inside xhr:" + xhr.status + " " + xhr.responseText);
-      $('#error_msg').text("Error! Route does not exist!");
-    break;
-
-
-  }
-};
-
-function getReadings(){
-  $.ajax("./api/reading", {
-    data: {
-      source: $('#fromAddress').val(),
-      destination: $('#toAddress').val(),
-    },
-    success: eventHandler,
-    error: errorHandler
-  });
-  console.log("Inside function getReadings");
-}
-
-function clearReadings(){
-
-    $('#error_msg').text("");
-}
