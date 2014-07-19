@@ -144,7 +144,7 @@ var errorHandler = function(xhr) {
 function getReadings(){
   var source = codeSrcAddress();
   var destination = codeDestAddress();
-
+  $('.google-maps-iframe').width('50%');
 /*  org = new google.maps.LatLng (source);
   dest = new google.maps.LatLng ( destination);*/
   plotRoute();
