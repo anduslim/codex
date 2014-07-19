@@ -140,20 +140,23 @@ def get_readings_api(request, **kwargs):
     '''
 
     data = request.GET
-    source = data.get('source', None)
-    destination = data.get('destination', None)
+    getsource = data.get('source', None)
+    getdestination = data.get('destination', None)
 
-    readings = Reading.objects.get_readings(source, destination)
+    readings = Reading.objects.get_readings(getsource, getdestination)
 
-    import pdb; pdb.set_trace()
-    response_data = {}
-    response_data['status'] = {'code': 200,
-                                'timestamp': datetime.datetime.now(),
-                            }
-
-
-    response_data['readings'] = {
-                                'value': readings
+    if readings:
+        response_data = {}
+        response_data['status'] = {'code': 200,
+                                    'timestamp': datetime.datetime.now(),
                                 }
 
-    return HttpResponse(json.dumps(response_data, cls=DjangoJSONEncoder), status=200, content_type="application/json")
+
+        response_data['readings'] = {
+                                    'value': readings
+                                    }
+
+        return HttpResponse(json.dumps(response_data, cls=DjangoJSONEncoder), status=200, content_type="application/json")
+    else:
+        messages.add_message(request, messages.ERROR, "Error!Readings do not exist.")
+        return HttpResponseNotFound(content=dict(error_code=404, error_msg="Readings do not exist."))

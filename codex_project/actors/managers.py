@@ -67,10 +67,13 @@ class ReadingsManager(models.Manager):
 
     def get_readings(self, source=None, destination=None):
 
-        if source and destination:
-            readings = self.parse_readings(self.model.objects.get())
-        else:
-            readings = self.parse_readings(self.model.objects.all())
+        try:
+            if source and destination:
+                readings = self.parse_readings(self.model.objects.get())
+            else:
+                readings = self.parse_readings(self.model.objects.all())
+        except self.model.DoesNotExist:
+            readings = False
 
         return readings
 
