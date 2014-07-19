@@ -128,7 +128,7 @@ google.setOnLoadCallback(function (){
         setTimeout(function(){
           var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
         var options = {
-          title: "2014 CyclePhilly Trips",
+          title: "2014 WheelAccess Trips",
           height: 150,
           calendar: { cellSize: 13 },
           noDataPattern: {
@@ -144,7 +144,7 @@ google.setOnLoadCallback(function (){
 
       var chart = new google.visualization.Calendar(document.getElementById('calendar_basic'));
       var options = {
-        title: "2014 CyclePhilly Trips",
+        title: "2014 WheelAccess Trips",
         height: 150,
         calendar: { cellSize: 13 },
         noDataPattern: {
