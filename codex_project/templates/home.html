@@ -3,27 +3,53 @@
 {% block css %}
 {{block.super}}
 <style>
-/* Move down content because we have a fixed navbar that is 50px tall */
-body {
-  padding-top: 50px;
-  padding-bottom: 20px;
-}
-.highlight {
-  padding: 9px 14px;
-  margin-bottom: 14px;
-  background-color: #f7f7f9;
-  border: 1px solid #e1e1e8;
-  border-radius: 4px;
-  word-wrap: break-word;
-}
-.nav_highlight {
-  border: 1px solid #f1f1f8;
-  background-color: #efefe3;
-  border-radius: 3px;
-
-}
 </style>
-{% endblock css %}
+<script type="text/javascript"
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyALfYLKHZ7KR9kekztaEeMTh5RrbxiBAyQ">
+</script>
+<script type="text/javascript" src="{{STATIC_URL}}js/gmaps.js"></script>
+
+<script>
+/*    function initialise() {
+
+        var myLatlng = new google.maps.LatLng(1.34374595,103.82404489999999); // Add the coordinates
+        var mapOptions = {
+            zoom: 11, // The initial zoom level when your map loads (0-20)
+            minZoom: 6, // Minimum zoom level allowed (0-20)
+            maxZoom: 17, // Maximum soom level allowed (0-20)
+            zoomControl:true, // Set to true if using zoomControlOptions below, or false to remove all zoom controls.
+            zoomControlOptions: {
+                style:google.maps.ZoomControlStyle.DEFAULT // Change to SMALL to force just the + and - buttons.
+            },
+            center: myLatlng, // Centre the Map to our coordinates variable
+            mapTypeId: google.maps.MapTypeId.ROADMAP, // Set the type of Map
+            scrollwheel: false, // Disable Mouse Scroll zooming (Essential for responsive sites!)
+            // All of the below are set to true by default, so simply remove if set to true:
+            panControl:false, // Set to false to disable
+            mapTypeControl:false, // Disable Map/Satellite switch
+            scaleControl:false, // Set to false to hide scale
+            streetViewControl:false, // Set to disable to hide street view
+            overviewMapControl:false, // Set to false to remove overview control
+            rotateControl:false // Set to false to disable rotate control
+        }
+        var map = new google.maps.Map(document.getElementById('map-canvas'), mapOptions); // Render our map within the empty div
+
+        google.maps.event.addDomListener(window, 'resize', function() { map.setCenter(myLatlng); }); // Keeps the Pin Central when resizing the browser on responsive sites
+    }*/
+    //google.maps.event.addDomListener(window, 'load', initialise); // Execute our 'initialise' function once the page has loaded.
+</script>
+{% endblock extra_css %}
+
+{% block page_title %}{% endblock %}
+{% block page_class %}home-page{% endblock %}
+
+{% block body-attributes %}style="background-position: 0px 0px;" onload="initialize()"{% endblock %}
+
+{% block content %}
+
+    <!--[if lt IE 7]>
+            <p class="chromeframe">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> or <a href="http://www.google.com/chromeframe/?redirect=true">activate Google Chrome Frame</a> to improve your experience.</p>
+        <![endif]-->
 
 {% block page_title %}Key Management Dashboard{% endblock %}
 {% block page_class %}home-page{% endblock %}
@@ -207,13 +233,102 @@ body {
                     <span id="node_type" style="width:100%; word-wrap: break-word;">{{ node.get_node_type_display }}</span>
                   </div>
                 </div>
-                <div class="row" style="padding-bottom:15px;">
-                  <div class="col-md-5">
-                    <label>Status</label>
-                  </div>
-                  <div class="col-md-7">
-                    <span id="node_status" style="width:100%; word-wrap: break-word;">Registered: {{ node.registration_status }}</span>
-                  </div>
+                <!-- /.span4 -->
+            </div>
+    </div></section>
+
+    <section class="pad-10" id="imap" data-speed="2" data-type="background">
+        <div class="container">
+            <div class="page-header">
+                <h1>Interactive Maps</h1>
+            </div>
+            <div class="row-fluid">
+                <div class="span4">
+
+                    <form action="#" onsubmit="setDirections(this.from.value, this.to.value, this.locale.value); return false">
+
+                      <table>
+                       <tbody>
+                       <tr>
+                           <th align="right">From:&nbsp;</th>
+
+                           <td><input type="text" size="25" id="fromAddress" name="from" value="San Francisco"></td>
+                           <th align="right">&nbsp;&nbsp;To:&nbsp;</th>
+                           <td align="right"><input type="text" size="25" id="toAddress" name="to" value="Mountain View"></td>
+                          <td colspan="3">
+                            <input name="submit" type="submit" value="Get Directions!">
+                        </td>
+                       </tr>
+
+                       </tbody></table>
+                    </form>
+                    <br/>
+                    <div class="google-maps">
+                        <div id="controls" class="mcontrols"></div>
+                        <div id="map-canvas" class="google-maps-iframe"></div>
+                    </div>
+                </div><!-- /.span4 -->
+            </div>
+        </div>
+    </section>
+
+
+<!-- FOOTER -->
+    <section id="foot" data-speed="1" data-type="background">
+        <div class="container">
+            <div class="row-fluid">
+                <div class="span4">
+
+                    <h2>Partners</h2>
+                    <div class="clearfix">
+                        <a href="http://sns.i2r.a-star.edu.sg/"><img class="float-left no-scale marg-1" src="{{STATIC_URL}}img/sns.jpg"></a>
+                        <a href="http://hwa.org.sg/"><img class="float-left no-scale marg-1" src="{{STATIC_URL}}img/hwa.png"></a>
+                        <a href="http://www.spd.org.sg/"><img class="float-left no-scale marg-1" src="{{STATIC_URL}}img/spd.jpg"></a>
+                        <a href="http://www.dpa.org.sg/"><img class="float-left no-scale marg-1" src="{{STATIC_URL}}img/dpa.png"></a>
+                    </div>
+                </div><!-- /.span4 -->
+             </div>
+        </div>
+  </section>
+
+
+  <section class="pad-5" id="foot" data-speed="2" data-type="background">
+        <div class="container">
+            <div class="row-fluid">
+                <div class="span4">
+ <!-- Begin terms and contact -->
+                    <div align="center">
+
+<a href="/#terms">Terms and Privacy</a> | <a href="mailto:support@wheelaccess.info">Contact Us</a></a></div>
+
+<!-- lightbox container hidden with CSS -->
+<div class="lightbox" id="terms">
+    <div style=""></div>
+    <div class="marg-10">
+        <p><a href="/#_" id="termsLink">» close «</a></p>
+        <h2 align="center">Terms of Use, Conditions and Privacy</h2>
+        <p>WheelAccess is an app and affiliated webmap that was developed by Code for Philly in connection with the Delaware Valley Regional Planning Commission (collectively and including their affiliates and partners and their respective officers, directors, employees, agents, suppliers, and licensors, the “<strong>CP Team</strong>”) to help local agencies study and understand the needs of cyclists, so that the agencies can more effectively prioritize cycling infrastructure investments. These terms of use and privacy policy explain the services that are provided by the CP Team and WheelAccess, the terms under which those services are being provided, and describe how personal information is collected, used, and disclosed when you use WheelAccess through your mobile device.&nbsp; These terms and the privacy policy apply to all users of WheelAccess, and by using WheelAccess, you are accepting and agreeing to these terms.<strong>&nbsp; If you do not agree to these terms of use and privacy policy, do not use WheelAccess. </strong>&nbsp;The CP Team may revise these terms of use and privacy policy at any time, and will notify you of any changes in by posting the revised information here.&nbsp; Any questions concerning these terms of use and privacy policy should be directed to <a href="mailto:support@wheelaccess.org">support@wheelaccess.org</a>.&nbsp; </p>
+        <p align="center"><strong>TERMS OF USE</strong></p>
+        <p>WheelAccess offers you the ability to track and record your bicycle trip routes, times, and purposes, and to view the bicycle trip routes of others, while also allowing local transportation planners to study and base decisions on users’ actual bicycle usage.&nbsp; Use of WheelAccess requires your mobile device to have and use a data connection; your carrier’s normal rates and fees will apply.&nbsp; </p>
+        <p><strong><em>User conduct and content.</em></strong>&nbsp; When you use WheelAccess, information including your longitude/latitude, speed, and velocity will be collected.&nbsp; To use some of the optional web-based features of WheelAccess, you can input certain additional personal information and will have the option to create a personal account.&nbsp; .&nbsp; If you input additional personal information, you must provide true and accurate information.&nbsp; Your failure to do so may negatively impact your ability to use the features of WheelAccess.&nbsp; If you create an account, you are responsible for any actions that take place under your account.&nbsp; Keep your username and password secure and do not allow anyone else to use them.&nbsp; &nbsp;By submitting content to the WheelAccess app (whether by inputting information such as your name, email address, age, etc., or by allowing the app to collect automatically generated information such as your GPS location), you grant the CP Team a non-exclusive, non-revocable, worldwide, transferable, royalty-free, perpetual right to use that information in any manner or media now or later developed, for any purpose, commercial, advertising, or otherwise, including the right to translate, display, reproduce, modify, create derivative works, sublicense, distribute, assign, and commercialize without any payment due to you; provided, however, that such use shall be in accordance with the Privacy Policy, below.&nbsp; The CP Team does not monitor or prescreen user-generated content before it is posted and does not undertake any obligation or liability related to any such content, but reserves the right to remove or edit any such content or to terminate your account for any reason.&nbsp; If you elect to create a WheelAccess account using a social networking account (such as a Facebook, Google, or other social networking account), you acknowledge and agree that information that you submit to and that is collected by WheelAccess may be shared via that social networking account.&nbsp; WheelAccess does not monitor or prescreen content before it is posted to your social networking account; you are solely and personally responsible for any content that may be posted to your social networking accounts.</p>
+        <p><strong><em>Age restrictions</em></strong>.&nbsp; WheelAccess is intended solely for use by users who are 13 years of age or older, and it is a violation of these terms of use for anyone under the age of 13 to register.&nbsp; By downloading and using WheelAccess, you represent and warrant that you are 13 years or older.&nbsp; If you are 13 or older, but under the age of 18, you must review these terms with your parent(s) or legal guardian(s) to ensure that both you and your parent(s) or legal guardian(s) understand and consent to the terms.&nbsp; A parent or legal guardian accepting these terms for the benefit of a child agrees and accepts full responsibility for the child’s use of WheelAccess, including all financial charges and legal liability that the child may incur.&nbsp; </p>
+        <p><strong><em>Personal safety notice.&nbsp; </em></strong>You understand that all your athletic and/or recreational activities, including bicycling while using WheelAccess, may have inherent, implicit, and/or express risks of bodily injury or death and/or property damage.&nbsp; You understand and agree that you voluntarily and at your own free will assume all known and unknown risks associated with such athletic or recreational activities, even if such risks may be claimed to be caused in whole or in part by the actions, inactions, or negligence of the CP Team or others.&nbsp; You understand that the CP Team will not carry out and is not responsible for any physical inspection, supervision, or preparation of any of the routes displayed in the WheelAccess app and webmap, and that the inclusion of a route is in no way an endorsement or recommendation of any roadway, path, or other route for bicycling, nor are they an indication that any roadway, path, or other route is intended for use by bicyclists. Potential hazards and obstructions may exist on the routes shown, and the CP Team and its partner agencies in no way warrant the safety or fitness of the routes shown. The CP Team encourages you to always put safety first, follow applicable traffic regulations, do not change settings on your mobile device or WheelAccess while in motion or in unsafe areas, and always exercise due diligence when exercising.&nbsp; </p>
+        <p><strong><em>Disclaimer of warranties and liabilities.&nbsp; </em></strong>WheelAccess is provided “AS IS” without any express or implied warranties of any kind.&nbsp; WheelAccess disclaims all warranties to the fullest extent permitted by law, whether express or implied, including but not limited to warranties of title, merchantability, fitness for a particular purposes, and non-infringement.&nbsp; WheelAccess cannot guarantee that use of WheelAccess will be timely, uninterrupted, secure, or error-free, that any defects, errors, or malfunctions will be corrected, that WheelAccess, its platform, or the server hosting WheelAccess or associated data are free of viruses or anything else harmful.&nbsp; To the fullest extent permitted by law, the CP Team undertakes no warranties or representations as to the use of WheelAccess in terms of correctness, accuracy, adequacy, usefulness, reliability, availability, or otherwise.&nbsp; The CP Team is not liable for the cost of any communications between the CP Team and you or your use of WheelAccess; you bear the responsibility and cost of your choice of data transmission facilities, and your carrier’s normal rates and fees apply.&nbsp; You understand and agree that you have downloaded WheelAccess at your own risk, and will be solely responsible for your use and any damage to your mobile device when you access WheelAccess, loss of data, or any other harm of any kind that may occur.&nbsp; </p>
+        <p><strong><em>Limitation of liability.&nbsp; </em></strong>To the<strong></strong>fullest extent of the law, the CP Team shall not jointly or severally be liable for any direct, special, incidental, indirect, or consequential damages, including but not limited to lost profits, business interruptions, or lost data that result from the use of or the inability to use WheelAccess and any user generated content, even if the CP Team has been advised of the possibility of such damages.&nbsp; You expressly agree and promise not to sue any member of the CP Team for any claims, injuries, damages, or losses associated with your use of WheelAccess.&nbsp; Applicable law may not allow the limitation or exclusion of liability or incidental or consequential damages, so the foregoing limitation may not apply to you in its entirety.&nbsp; However, you agree that the CP Team’s liability will be limited to the maximum extent of the law.&nbsp; If links are established to a third-party website, the CP Parties are not liable for the contents of that website.&nbsp; </p>
+        <p><strong><em>Indemnity</em></strong>.&nbsp; You agree to indemnify, defend, and hold harmless the CP Team from any and all claims, losses, liabilities, expenses, damages, and costs, including without limitation reasonable attorneys’ fees, arising from or relating in any way to your use of WheelAccess and your conduct in connection with WheelAccess, other users of WheelAccess, or any violation of these terms.&nbsp; </p>
+        <p><strong><em>Termination.</em></strong>&nbsp; The CP Team reserves the right to change, discontinue, and/or terminate WheelAccess at any time without notice, at its own discretion, and may edit or remove in whole or in part any user’s account or user-generated content.&nbsp; You understand and agree that some of your user generated content may continue to appear on WheelAccess or other platforms, even after your account is terminated.&nbsp; </p>
+        <p align="center"><strong>PRIVACY POLICY</strong></p>
+        <p>WheelAccess uses your mobile device’s GPS capabilities to record your bicycle trip routes, times, speed, velocity and purposes, along with other information that you may elect to enter into the app (age, email, gender, ethnicity, home income, home zip, work zip, school zip, cycling frequency, rider type, rider history, etc.).&nbsp; </p>
+        <p><strong><em>You consent to sharing information with the WheelAccess community and the general public</em></strong>.&nbsp; By using WheelAccess, you agree and acknowledge that we may disclose and make available to other WheelAccess users or to the general public on the WheelAccess app or on a website information about your bicycle routes.&nbsp; To protect your privacy, your trips will be shown anonymously and the precise start and end locations of your trips will be obscured from public view; trips will be available to the public based on route purpose. &nbsp;&nbsp;&nbsp;If you elect to create a WheelAccess account using a social networking account (e.g., Facebook, Google, etc.) and allow WheelAccess permissions to “share” information with that account, you agree and acknowledge that any information that you have inputted into the WheelAccess app or that has been collected by the WheelAccess app may be shared to your social networking account and will be subject to the permissions and privacy settings that you have put in place for that account.&nbsp; Neither WheelAccess nor the CP Team is responsible for monitoring content that may be pushed by WheelAccess to your social networking account or for ensuring that your social networking account settings are appropriate.&nbsp; </p>
+        <p><strong><em>You consent to sharing information with transportation planning agencies.&nbsp; </em></strong>By using WheelAccess, you agree and acknowledge that the information that is recorded by WheelAccess may be shared among members of the CP Team, including transportation planners, the Delaware Valley Regional Planning Commission (DVRPC), and related state agencies, for analysis and use to inform their decisions about bicycle facilities in the region and to allow them to better understand and predict where cyclists will ride and how land developments and transportation infrastructure affect cycling activity. &nbsp;Information transmitted to transportation planners will include only trip information (which includes GPS data, your trip route, time, speed, velocity and purposes) and your iPhone's Unique Device Identifier (UDID) or Android phone's Device ID; information transmitted to transportation planners will not include your name, age, gender, or other personal information unless you specifically authorize the disclosure of that information by entering that information into the WheelAccess app. </p>
+        <p><strong><em>Use and transfer of information for business and legal purposes.</em></strong> By using WheelAccess, you acknowledge and agree that your aggregated or otherwise de-identifiable personal information may be used by WheelAccess for any purpose and may be shared publicly or with WheelAccess’s business partners.&nbsp; Your information may be transferred from WheelAccess if there is a business transaction or transfer of ownership of WheelAccess; if this happens, you will be notified of the change and your personal information will continue to be protected in accordance with this Privacy Policy.&nbsp; You acknowledge and agree that the CP Parties may access, preserve, and disclose your information if required to do so by law or in a good faith belief that such access or preservation or disclosure is reasonably necessary to comply with a legal process, enforce the terms of use, or protect the rights, property, or safety of WheelAccess, its users, and the public.</p>
+        <p><strong><em>Data protection.&nbsp; </em></strong>In order to protect your personal information that is stored by WheelAccess, we and our data center service providers have implemented various security measures to keep your personal information stored in a secure environment and treated confidentially.&nbsp; Your personal information is only accessible to a limited number of WheelAccess personnel, who all have special access rights and are required to keep the information confidential.&nbsp; </p>
+         <p><a href="/#_" id="termsLink">» close «</a></p>
+        </div>
+        <p> <a href="/#_" id="close_button">X</a></p>
+    </div>
+<!-- End terms and contact -->
+                    </div><!-- /.span4 -->
                 </div>
 
                 <!-- Nav tabs -->
