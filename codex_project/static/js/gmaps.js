@@ -30,6 +30,11 @@ var marker;
 var org;
 var dest;
 
+var poly;
+var lines = [];
+var endMark;
+var infowindow = new google.maps.InfoWindow();
+
 function initialize()
 {
     var latlng = new google.maps.LatLng(1.34374595,103.82404489999999);
@@ -37,7 +42,7 @@ function initialize()
     var myOptions = {
         zoom: 11, // The initial zoom level when your map loads (0-20)
         minZoom: 6, // Minimum zoom level allowed (0-20)
-        maxZoom: 17, // Maximum soom level allowed (0-20)
+        maxZoom: 20, // Maximum soom level allowed (0-20)
         zoomControl:true, // Set to true if using zoomControlOptions below, or false to remove all zoom controls.
         zoomControlOptions: {
             style:google.maps.ZoomControlStyle.DEFAULT // Change to SMALL to force just the + and - buttons.
@@ -55,7 +60,115 @@ function initialize()
     };
     map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
 
+
 }
+
+function plotGeoJson(jsontext) {
+  console.log(jsontext.features.length); // assume all features as "Point"
+  var firstObject = jsontext.features[0];
+  var startCoords = firstObject.geometry.coordinates;
+  var prevObject = firstObject;
+  var currObject;
+
+  var mymarker = new google.maps.Marker({
+    position: {lat: startCoords[1], lng: startCoords[0]},
+    icon: {
+      path: google.maps.SymbolPath.CIRCLE,
+      scale: 4
+    },
+    map: map,
+    title:"Start"
+  });
+
+/*  var latlng = new google.maps.LatLng(myJson['features'][0]['geometry']['coordinates'][0],
+                myJson['features'][0]['geometry']['coordinates'][1]);
+*/
+  map.setCenter(mymarker.position);
+  map.setZoom(18);
+
+
+  //polyline for calculating total distance
+  var linepath = poly.getPath();
+  linepath.push(new google.maps.LatLng(startCoords[1], startCoords[0]));
+
+  for(var i = 1; i < jsontext.features.length; i++) {
+    currObject = jsontext.features[i];
+    var coords = currObject.geometry.coordinates;
+    createline(prevObject, currObject);
+    linepath.push(new google.maps.LatLng(coords[1], coords[0]));
+    prevObject = currObject;
+  }//end for
+
+  var endCoords = currObject.geometry.coordinates;
+  linepath.push(new google.maps.LatLng(endCoords[1], endCoords[0]));
+  endMark = new google.maps.Marker({
+    position: {lat: endCoords[1], lng: endCoords[0]},
+    map: map,
+    title:"End"
+  });
+
+  google.maps.event.addListener(endMark, 'mouseover', function(){
+    var dist = google.maps.geometry.spherical.computeLength(poly.getPath());
+    infowindow.setContent('<p style="color:black;">Distance: '+ dist.toFixed(1) + 'metres <br>' + 'Start time: '+
+        firstObject.properties.timestamp+'sec <br>'+'End time: '+ currObject.properties.timestamp + 'sec</p>');
+    infowindow.open(map,endMark);
+  });
+  google.maps.event.addListener(endMark, 'mouseout', function(){
+    infowindow.setMap(null);
+  });
+
+}//end plotGeoJson()
+
+
+function createline(prevObject, currObject) {
+    var startCoords = prevObject.geometry.coordinates;
+    var coords = currObject.geometry.coordinates;
+    var color, weight, opacity;
+    console.log(currObject.properties.inclination );
+    if(currObject.properties.inclination < 0.1 && currObject.properties.inclination > -0.1) {
+      color = "green";
+    } else if(currObject.properties.inclination <= -0.1) {
+      color = "blue";
+    } else {
+      color = "red";
+    }
+    if(currObject.properties.bumpiness > 2) {
+      weight = 8; opacity = 0.8;
+    } else {
+      weight = 4; opacity = 0.5;
+    }
+    var line = new google.maps.Polyline({
+      map: map,
+      path: [
+              new google.maps.LatLng(startCoords[1], startCoords[0]),
+              new google.maps.LatLng(coords[1], coords[0])
+            ],
+      geodesic: true,
+      strokeColor: color,
+      strokeOpacity: opacity,
+      strokeWeight: weight,
+      zIndex: 1,
+      timestamp: currObject.properties.timestamp,
+      inclination: currObject.properties.inclination,
+      bumpiness: currObject.properties.bumpiness
+    });
+
+    google.maps.event.addListener(line, 'mouseover', function(){
+      console.log(line.timestamp);
+      var path = line.getPath();
+      infowindow.open(map, new google.maps.Marker({
+            position: path.getAt(0),
+            map: null}));
+    infowindow.setContent("<p style='color:black;'> Timestamp: "+line.timestamp+" sec <br>"+
+                "Inclination: "+line.inclination+"<br>"+
+                "Bumpiness: "+line.bumpiness + "</p>");
+    });
+    google.maps.event.addListener(line, 'mouseout', function(){
+      infowindow.close();
+    });
+    lines.push(line);
+}
+
 
 function codeSrcAddress() {
     var address = $('#fromAddress').val();
@@ -144,7 +257,7 @@ var errorHandler = function(xhr) {
 function getReadings(){
   var source = codeSrcAddress();
   var destination = codeDestAddress();
-  $('.google-maps-iframe').width('50%');
+/*  $('.google-maps-iframe').width('50%');*/
 /*  org = new google.maps.LatLng (source);
   dest = new google.maps.LatLng ( destination);*/
   plotRoute();
