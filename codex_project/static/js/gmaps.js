@@ -34,30 +34,32 @@ var poly;
 var lines = [];
 var endMark;
 var infowindow = new google.maps.InfoWindow();
+var latlng = new google.maps.LatLng(1.34374595,103.82404489999999);
+var myOptions = {
+    zoom: 11, // The initial zoom level when your map loads (0-20)
+    minZoom: 6, // Minimum zoom level allowed (0-20)
+    maxZoom: 20, // Maximum soom level allowed (0-20)
+    zoomControl:true, // Set to true if using zoomControlOptions below, or false to remove all zoom controls.
+    zoomControlOptions: {
+        style:google.maps.ZoomControlStyle.DEFAULT // Change to SMALL to force just the + and - buttons.
+    },
+    center: latlng, // Centre the Map to our coordinates variable
+    mapTypeId: google.maps.MapTypeId.ROADMAP, // Set the type of Map
+    scrollwheel: false, // Disable Mouse Scroll zooming (Essential for responsive sites!)
+    // All of the below are set to true by default, so simply remove if set to true:
+    panControl:false, // Set to false to disable
+    mapTypeControl:false, // Disable Map/Satellite switch
+    scaleControl:false, // Set to false to hide scale
+    streetViewControl:false, // Set to disable to hide street view
+    overviewMapControl:false, // Set to false to remove overview control
+    rotateControl:false // Set to false to disable rotate control
+};
 
 function initialize()
 {
-    var latlng = new google.maps.LatLng(1.34374595,103.82404489999999);
+
     geocoder = new google.maps.Geocoder();
-    var myOptions = {
-        zoom: 11, // The initial zoom level when your map loads (0-20)
-        minZoom: 6, // Minimum zoom level allowed (0-20)
-        maxZoom: 20, // Maximum soom level allowed (0-20)
-        zoomControl:true, // Set to true if using zoomControlOptions below, or false to remove all zoom controls.
-        zoomControlOptions: {
-            style:google.maps.ZoomControlStyle.DEFAULT // Change to SMALL to force just the + and - buttons.
-        },
-        center: latlng, // Centre the Map to our coordinates variable
-        mapTypeId: google.maps.MapTypeId.ROADMAP, // Set the type of Map
-        scrollwheel: false, // Disable Mouse Scroll zooming (Essential for responsive sites!)
-        // All of the below are set to true by default, so simply remove if set to true:
-        panControl:false, // Set to false to disable
-        mapTypeControl:false, // Disable Map/Satellite switch
-        scaleControl:false, // Set to false to hide scale
-        streetViewControl:false, // Set to disable to hide street view
-        overviewMapControl:false, // Set to false to remove overview control
-        rotateControl:false // Set to false to disable rotate control
-    };
+
     map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
 
 
@@ -275,6 +277,9 @@ function getReadings(){
 function clearReadings(){
 
     $('#error_msg').text("");
+    for (var i=0; i<lines.length; i++) {
+        lines[i].setMap(null); //or line[i].setVisible(false);
+    }
     map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
 }
 
