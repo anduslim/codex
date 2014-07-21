@@ -161,7 +161,7 @@ function createline(prevObject, currObject) {
       infowindow.open(map, new google.maps.Marker({
             position: path.getAt(0),
             map: null}));
-    infowindow.setContent("<p style='color:black;'> Timestamp: "+line.timestamp+" sec <br>"+
+    infowindow.setContent("<p style='color:black;'> Time: "+line.timestamp+" sec <br>"+
                 "Inclination: "+line.inclination+"<br>"+
                 "Bumpiness: "+line.bumpiness + "</p>");
     });
